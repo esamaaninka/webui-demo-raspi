@@ -31,9 +31,9 @@ stages:
         displayName: Push image
         inputs:
           containerRegistry: |
-          $(dockerHub)
+            $(dockerHub)
         repository: $(imageName)
         command: push
         tags: |
-        test1
-        test2
+          test1
+          test2
