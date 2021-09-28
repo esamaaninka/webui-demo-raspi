@@ -1,0 +1,41 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "esa-webui-raspi"
+  namespace: "default"
+  labels:
+    app: "esa-webui-raspi"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "esa-webui-raspi"
+  template:
+    metadata:
+      labels:
+        app: "esa-webui-raspi"
+    spec:
+      containers:
+      - name: "webui-demo-raspi-1"
+        image: "gcr.io/build-deploy-koe/github.com/esamaaninka/webui-demo-raspi:$SHORT_SHA"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "esa-webui-raspi-hpa-xyul"
+  namespace: "default"
+  labels:
+    app: "esa-webui-raspi"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "esa-webui-raspi"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80
